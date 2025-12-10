@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+   --color-primary: #465fff;
+   --color-primary-hover: #3b4fd6;
+   --color-primary-disabled: #93c5fd;
+   --color-brand:#161950;
+  --font-sans: 'Poppins', Arial, Helvetica, sans-serif;
+  --font-mono: 'Geist Mono', monospace;
+  --breakpoint-2xsm: 375px;
+  --breakpoint-xsm: 425px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  --breakpoint-3xl: 2000px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  @apply transition-colors duration-200;
+  margin: 0;
+  padding: 0;
+}
+
+.container-custom {
+  @apply max-w-[1200px] mx-auto p-8 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+}
+.btn-toggle {
+  @apply inline-flex size-14 items-center justify-center rounded-full text-white transition-colors;
+  background-color: var(--color-primary);
+}
+.btn-toggle:hover {
+  background-color: var(--color-primary-hover);
+}
+.btn-social {
+  @apply flex items-center  justify-center gap-3 py-3 px-7 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10;
+}
+.heading-lg {
+  @apply text-3xl font-bold mb-4;
+}
+
+.btn-primary {
+  @apply px-4 py-3 font-medium rounded-lg transition text-sm  text-white transition-colors;
+  background-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+.btn-primary:disabled {
+  background-color: var(--color-primary-disabled);
+}
+input:focus {
+  --tw-ring-inset: var(--tw-empty, );
+  --tw-ring-offset-width: 0px;
+  --tw-ring-offset-color: transparent;
+  --tw-ring-color: var(--color-primary);
+  --tw-ring-offset-shadow: 0 0 #0000;
+  --tw-ring-shadow: 0 0 0 1px var(--tw-ring-color);
+  box-shadow: var(--tw-ring-shadow);
+  outline: none;
+}
+@media (max-width: var(--breakpoint-3xl)) { .container-custom { @apply max-w-[1400px] p-8; } }
+@media (max-width: var(--breakpoint-2xl)) { .container-custom { @apply max-w-[1200px] p-7; } }
+@media (max-width: var(--breakpoint-xl))   { .container-custom { @apply max-w-[1000px] p-6; } }
+@media (max-width: var(--breakpoint-lg))   { .container-custom { @apply max-w-[800px] p-5; } .heading-lg { @apply text-2xl; } .btn-primary { @apply px-3 py-1.5 text-sm; } }
+@media (max-width: var(--breakpoint-md))   { .container-custom { @apply max-w-[95%] p-4; } .heading-lg { @apply text-xl; } .btn-primary { @apply px-2 py-1 text-sm; } }
+@media (max-width: var(--breakpoint-sm))   { .container-custom { @apply max-w-[90%] p-3; } }
+@media (max-width: var(--breakpoint-xsm))  { .container-custom { @apply max-w-[85%] p-2; } }
+@media (max-width: var(--breakpoint-2xsm)) { .container-custom { @apply max-w-[80%] p-1; } }
