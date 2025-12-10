@@ -85,7 +85,7 @@ function Logintemplate({ handleChange, handleLogin, loading, error }) {
                         {error && <p className="text-red-500 text-center text-sm">{error}</p>}
                         <Button type="submit" loading={loading} className="text-[var(--color-primary)] text-sm font-medium !mt-1 w-full">Sign In</Button>
                         <div className="flex items-center justify-center gap-2 mt-5">
-                            <Label className="!mb-0">Don't have an account?</Label>
+                            <Label className="!mb-0">Don&#39;t have an account?</Label>
                             <button type="button" className="text-[var(--color-primary)] text-sm font-medium">Sign Up?</button>
                         </div>
                     </div>
