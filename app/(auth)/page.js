@@ -28,7 +28,7 @@ export default function LoginPage() {
     if (isAuthenticated) {
       router.replace("/dashboard");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated,router]);
 
   return (
     <Logintemplate
