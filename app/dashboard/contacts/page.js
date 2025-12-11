@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { Button } from "../../components/Button";
@@ -11,48 +10,50 @@ import FormParser from "../../components/FormParser";
 import Masters from "../../components/Masters.json";
 import SuccessModal from "../../components/SuccessModal";
 import ErrorModal from "../../components/ErrorModal";
-import { getData, deleteData, saveOrUpdateData } from "./UsersApi";
+import { getData, deleteData, saveOrUpdateData, bulkUploadUsers } from "./UsersApi";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDebounce } from "../../hooks/useDebounce";
+import Select from "react-select";
 
 export default function Contacts() {
   const [searchText, setSearchText] = useState("");
+  const debouncedSearch = useDebounce(searchText, 500);
+  const [statusFilter, setStatusFilter] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [isBulk, setIsBulk] = useState(false);
   const [successModalOpen, setSuccessModalOpen] = useState(false);
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
   const queryClient = useQueryClient();
-
   const { data, isLoading } = useQuery({
-    queryKey: ["users", currentPage, rowsPerPage, searchText],
+    queryKey: ["users", currentPage, rowsPerPage, debouncedSearch, statusFilter],
     queryFn: () =>
       getData({
         page: currentPage,
         pageSize: rowsPerPage,
-        search: searchText,
+        search: debouncedSearch,
+        status: statusFilter,
       }),
     keepPreviousData: true,
   });
 
- const saveMutation = useMutation({
-  mutationFn: (formData) => saveOrUpdateData(formData),
-  onSuccess: () => {
-    queryClient.invalidateQueries(["users"]); 
-    setModalMessage("Contact saved successfully");
-    setSuccessModalOpen(true);
-    closeModal();
-  },
-  onError: (error) => {
-    setModalMessage(
-      error?.response?.data?.message || "Failed to save contact"
-    );
-    setErrorModalOpen(true);
-  },
-});
-
+  const saveMutation = useMutation({
+    mutationFn: (formData) =>
+      isBulk ? bulkUploadUsers(formData) : saveOrUpdateData(formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["users"]);
+      setModalMessage(isBulk ? "Bulk upload successful" : "Contact saved successfully");
+      setSuccessModalOpen(true);
+      closeModal();
+    },
+    onError: (error) => {
+      setModalMessage(error?.response?.data?.message || "Failed to save data");
+      setErrorModalOpen(true);
+    },
+  });
 
   const deleteMutation = useMutation({
     mutationFn: deleteData,
@@ -67,14 +68,16 @@ export default function Contacts() {
     },
   });
 
-  const openModal = (contact = null) => {
+  const openModal = (contact = null, bulk = false) => {
     setSelectedContact(contact);
+    setIsBulk(bulk);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedContact(null);
+    setIsBulk(false);
   };
 
   const handleFormSubmit = (formData) => {
@@ -118,7 +121,7 @@ export default function Contacts() {
       name: "Actions",
       cell: (row) => (
         <div className="flex gap-2">
-          <button onClick={() => openModal(row)} className="text-blue-500">
+          <button onClick={() => openModal(row, false)} className="text-blue-500">
             <EditIcon />
           </button>
           <button onClick={() => handleDelete(row._id)} className="text-red-500">
@@ -136,21 +139,47 @@ export default function Contacts() {
 
   return (
     <div>
-      <Input
-        placeholder="Search contacts..."
-        value={searchText}
-        onChange={(e) => {
-          setSearchText(e.target.value);
-          setCurrentPage(1);
-        }}
-        className="!w-56 mb-4"
-      />
+      <div className="flex flex-col md:flex-row items-center gap-3 mb-4">
+        <Input
+          placeholder="Search contacts..."
+          value={searchText}
+          onChange={(e) => {
+            setSearchText(e.target.value);
+            setCurrentPage(1);
+          }}
+          className="!w-56"
+        />
+        <Select
+          className="w-48"
+          placeholder="Filter by Status"
+          isClearable
+          options={[
+            { value: "lead", label: "Lead" },
+            { value: "prospect", label: "Prospect" },
+            { value: "customer", label: "Customer" },
+          ]}
+          value={statusFilter ? { value: statusFilter, label: statusFilter } : null}
+          onChange={(opt) => {
+            setStatusFilter(opt ? opt.value : "");
+            setCurrentPage(1);
+          }}
+          styles={{
+            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+            menu: (base) => ({ ...base, zIndex: 9999 }),
+          }}
+        />
+      </div>
+
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-2">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           Contacts (Total: {data?.count || 0})
         </h1>
-        <Button onClick={() => openModal()}>Add Contact</Button>
+        <div className="flex gap-1.5">
+          <Button onClick={() => openModal(null, false)}>Add Contact</Button>
+          <Button onClick={() => openModal(null, true)}>Bulk Upload</Button>
+        </div>
       </div>
+
       <DataTable
         columns={columns}
         data={data?.results || []}
@@ -172,22 +201,25 @@ export default function Contacts() {
           setCurrentPage(page);
         }}
       />
+
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
-        title={selectedContact ? "Edit Contact" : "Add Contact"}
+        title={isBulk ? "Bulk Upload" : selectedContact ? "Edit Contact" : "Add Contact"}
       >
         <FormParser
-          modelObject={Masters.Contacts}
+          modelObject={isBulk ? Masters.BulUpload : Masters.Contacts}
           formData={selectedContact}
           formSubmit={handleFormSubmit}
         />
       </Modal>
+
       <SuccessModal
         isOpen={successModalOpen}
         onClose={() => setSuccessModalOpen(false)}
         message={modalMessage}
       />
+
       <ErrorModal
         isOpen={errorModalOpen}
         onClose={() => setErrorModalOpen(false)}

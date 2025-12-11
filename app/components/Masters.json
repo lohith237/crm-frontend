@@ -85,5 +85,28 @@
                 "default": null
             }
         ]
+    },
+    "BulUpload": {
+        "requiredFields": [
+            "file"
+        ],
+        "listDisplay": [
+            "file"
+        ],
+        "orderBy": [
+            "file"
+        ],
+        "layoutClass": "col-md-24",
+        "layoutSpecificFieldClasses": {
+        },
+        "fields": [
+            {
+                "fieldName": "file",
+                "label": "Users",
+                "fieldType": "file",
+                "inputType": "text",
+                "required": true
+            }
+        ]
     }
 }

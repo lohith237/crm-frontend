@@ -5,7 +5,7 @@ export const menuItems = [
   {
     key: "dashboard",
     label: "Dashboard",
-    url: "/dashboard",
+     url: null,   
     icon: GridIcon, 
     subMenu: [
       {

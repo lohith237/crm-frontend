@@ -1,7 +1,7 @@
 import axiosInstance from "../../../services/axiosConfig";
 
-export const getData = async ({ page, pageSize, search }) => {
-    const res = await axiosInstance.get(`/api/users?page=${page}&page_size=${pageSize}&search=${search}&role=customer`);
+export const getData = async ({ page, pageSize, search,status="" }) => {
+    const res = await axiosInstance.get(`/api/users?page=${page}&page_size=${pageSize}&search=${search}&role=customer&status=${status}`);
     return res.data;
 };
 
@@ -10,8 +10,15 @@ export const deleteData = async (id) => {
 };
 
 export const saveOrUpdateData = async (data) => {
-    console.log(data,"../")
     return data?._id
         ? axiosInstance.patch(`/api/users/${data._id}`, data)
         : axiosInstance.post(`/api/users`,data);
+};
+export const bulkUploadUsers = async (file) => {
+    const formData = new FormData();
+    console.log(file)
+    formData.append("file", file?.file);
+    return axiosInstance.post(`/api/users/bulk-upload`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
 };
