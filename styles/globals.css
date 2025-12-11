@@ -1,13 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 @custom-variant dark (&:is(.dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
-   --color-primary: #465fff;
-   --color-primary-hover: #3b4fd6;
-   --color-primary-disabled: #93c5fd;
-   --color-brand:#161950;
+  --color-primary: #465fff;
+  --color-primary-hover: #3b4fd6;
+  --color-primary-disabled: #93c5fd;
+  --color-brand: #161950;
+
+  /* Active menu colors */
+  --menu-active-bg: #ecf3ff;
+  --menu-active-color: #465fff;
+
   --font-sans: 'Poppins', Arial, Helvetica, sans-serif;
   --font-mono: 'Geist Mono', monospace;
   --breakpoint-2xsm: 375px;
@@ -39,31 +45,47 @@ body {
 .container-custom {
   @apply max-w-[1200px] mx-auto p-8 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
 }
+
 .btn-toggle {
   @apply inline-flex size-14 items-center justify-center rounded-full text-white transition-colors;
   background-color: var(--color-primary);
 }
+
+.btn-toggle-side {
+  @apply inline-flex items-center justify-center rounded-full text-white transition-colors border border-gray-200 cursor-pointer;
+  background-color: transparent !important;
+}
+
 .btn-toggle:hover {
   background-color: var(--color-primary-hover);
 }
-.btn-social {
-  @apply flex items-center  justify-center gap-3 py-3 px-7 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10;
+
+.btn-toggle-side:hover {
+  background-color: var(--color-primary-hover);
 }
+
+.btn-social {
+  @apply flex items-center justify-center gap-3 py-3 px-7 text-sm font-normal transition-colors bg-gray-100 rounded-lg hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10;
+  color: var(--foreground);
+}
+
 .heading-lg {
   @apply text-3xl font-bold mb-4;
 }
 
 .btn-primary {
-  @apply px-4 py-3 font-medium rounded-lg transition text-sm  text-white transition-colors;
+  @apply px-4 py-3 font-medium rounded-lg transition text-sm text-white;
   background-color: var(--color-primary);
 }
 
 .btn-primary:hover {
   background-color: var(--color-primary-hover);
 }
+
 .btn-primary:disabled {
   background-color: var(--color-primary-disabled);
 }
+
 input:focus {
   --tw-ring-inset: var(--tw-empty, );
   --tw-ring-offset-width: 0px;
@@ -74,39 +96,84 @@ input:focus {
   box-shadow: var(--tw-ring-shadow);
   outline: none;
 }
-@media (max-width: 1600px) {
-  .container-custom { @apply max-w-[1400px] p-8; }
+
+.menu-item {
+  @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-sm;
 }
 
-@media (max-width: 1536px) {
-  .container-custom { @apply max-w-[1200px] p-7; }
+.menu-item-active {
+  background-color: var(--menu-active-bg);
+  color: var(--menu-active-color);
 }
 
-@media (max-width: 1280px) {
-  .container-custom { @apply max-w-[1000px] p-6; }
+.menu-item-inactive {
+  @apply text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5;
 }
 
-@media (max-width: 1024px) {
-  .container-custom { @apply max-w-[800px] p-5; }
-  .heading-lg { @apply text-2xl; }
-  .btn-primary { @apply px-3 py-1.5 text-sm; }
+.menu-item-icon {
+  @apply text-gray-500 dark:text-gray-400;
 }
 
-@media (max-width: 768px) {
-  .container-custom { @apply max-w-[95%] p-4; }
-  .heading-lg { @apply text-xl; }
-  .btn-primary { @apply px-2 py-1 text-sm; }
+.menu-item-icon-active {
+  color: var(--menu-active-color);
 }
 
-@media (max-width: 640px) {
-  .container-custom { @apply max-w-[90%] p-3; }
+.menu-item-icon-inactive {
+  @apply text-gray-500 dark:text-gray-400;
 }
 
-@media (max-width: 480px) {
-  .container-custom { @apply max-w-[85%] p-2; }
+.menu-item-arrow {
+  @apply relative;
 }
 
-@media (max-width: 360px) {
-  .container-custom { @apply max-w-[80%] p-1; }
+.menu-item-arrow-active {
+  @apply rotate-180;
+  color: var(--menu-active-color);
 }
 
+.menu-item-arrow-inactive {
+  @apply text-gray-500 dark:text-gray-400;
+}
+
+.menu-dropdown-item {
+  @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium;
+}
+
+.menu-dropdown-item-active {
+  background-color: var(--menu-active-bg);
+  color: var(--menu-active-color);
+}
+
+.menu-dropdown-item-inactive {
+  @apply text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-white/5;
+}
+
+.menu-dropdown-badge {
+  @apply block rounded-full px-2.5 py-0.5 text-xs font-medium uppercase;
+  color: var(--menu-active-color);
+}
+
+.menu-dropdown-badge-active {
+  background-color: var(--menu-active-bg);
+}
+
+.menu-dropdown-badge-inactive {
+  background-color: var(--menu-active-bg);
+  opacity: 0.6;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;     
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;            
+}
+@media (max-width: 1600px) { .container-custom { @apply max-w-[1400px] p-8; } }
+@media (max-width: 1536px) { .container-custom { @apply max-w-[1200px] p-7; } }
+@media (max-width: 1280px) { .container-custom { @apply max-w-[1000px] p-6; } }
+@media (max-width: 1024px) { .container-custom { @apply max-w-[800px] p-5; } .heading-lg { @apply text-2xl; } .btn-primary { @apply px-3 py-1.5 text-sm; } }
+@media (max-width: 768px) { .container-custom { @apply max-w-[95%] p-4; } .heading-lg { @apply text-xl; } .btn-primary { @apply px-2 py-1 text-sm; } }
+@media (max-width: 640px) { .container-custom { @apply max-w-[90%] p-3; } }
+@media (max-width: 480px) { .container-custom { @apply max-w-[85%] p-2; } }
+@media (max-width: 360px) { .container-custom { @apply max-w-[80%] p-1; } }

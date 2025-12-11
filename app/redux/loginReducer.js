@@ -12,6 +12,9 @@ export const loginReducer = (state = initialState, action) => {
       return { ...state, loading: true, error: null };
 
     case "LOGIN_SUCCESS":
+      if (typeof window !== "undefined" && action.payload.token) {
+        sessionStorage.setItem("token", action.payload.token);
+      }
       return {
         ...state,
         isAuthenticated: true,
@@ -20,7 +23,6 @@ export const loginReducer = (state = initialState, action) => {
         loading: false,
         error: null,
       };
-
     case "LOGIN_FAILURE":
       return { ...state, loading: false, error: action.payload.data.message };
 

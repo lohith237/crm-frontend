@@ -14,11 +14,14 @@
     "axios": "^1.12.2",
     "next": "^15.5.7",
     "react": "19.1.0",
+    "react-data-table-component": "^7.7.0",
     "react-dom": "19.1.0",
     "react-redux": "^9.2.0",
+    "react-select": "^5.10.2",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^3.1.0"
+    "redux-thunk": "^3.1.0",
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

@@ -1,0 +1,89 @@
+{
+    "Contacts": {
+        "requiredFields": [
+            "name",
+            "email",
+            "phoneNumber",
+            "status"
+        ],
+        "listDisplay": [
+            "name",
+            "email",
+            "phoneNumber",
+            "company",
+            "description",
+            "status"
+        ],
+        "orderBy": [
+            "name",
+            "email",
+            "phoneNumber",
+            "company",
+            "status",
+            "description"
+        ],
+        "layoutClass": "col-md-12",
+        "layoutSpecificFieldClasses": {
+            "description": "col-md-24",
+            "status": "col-md-24"
+        },
+        "fields": [
+            {
+                "fieldName": "name",
+                "label": "Name",
+                "fieldType": "string",
+                "inputType": "text",
+                "required": true,
+                "max_length": 100
+            },
+            {
+                "fieldName": "email",
+                "label": "Email",
+                "fieldType": "string",
+                "inputType": "email",
+                "required": true
+            },
+            {
+                "fieldName": "phoneNumber",
+                "label": "Phone",
+                "fieldType": "string",
+                "inputType": "text",
+                "required": true,
+                "max_length": 10
+            },
+            {
+                "fieldName": "company",
+                "label": "Company",
+                "fieldType": "string",
+                "inputType": "text",
+                "default": null
+            },
+            {
+                "fieldName": "status",
+                "label": "Status",
+                "fieldType": "select",
+                "required": true,
+                "options": [
+                    {
+                        "value": "lead",
+                        "label": "Lead"
+                    },
+                    {
+                        "value": "prospect",
+                        "label": "Prospect"
+                    },
+                    {
+                        "value": "customer",
+                        "label": "Customer"
+                    }
+                ]
+            },
+            {
+                "fieldName": "description",
+                "label": "Notes",
+                "fieldType": "textarea",
+                "default": null
+            }
+        ]
+    }
+}
