@@ -1,3 +1,5 @@
+
+"use client";
 import { menuItems } from "./menuData";
 import Link from "next/link";
 import { useSidebar } from "../../context/SidebarContext";
